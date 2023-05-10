@@ -15,6 +15,10 @@ struct UserResults: Decodable {
         var name: Name
         var email: String
         var picture: Picture
+        var location: Location
+        var nat: String
+        var phone: String
+        var dob: Dob
     }
     
     struct Name: Decodable {
@@ -27,4 +31,14 @@ struct UserResults: Decodable {
         var large: String
     }
     
+    struct Location: Decodable {
+        var city: String
+        var state: String
+        var country: String
+        var postcode: Int
+    }
+    
+    struct Dob: Decodable {
+        var age: Int
+    }
 }

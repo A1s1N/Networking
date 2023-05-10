@@ -12,36 +12,57 @@ struct ContentView: View {
     @State var user: UserResults.User?
     
     var body: some View {
-        HStack {
-            Image(systemName: "globe")
-                .resizable()
-                .frame(width: 80, height: 80)
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            VStack(alignment: .leading) {
-                Text("\(user?.name.first ?? "Имя") \(user?.name.last ?? "Фамилия")")
-                    .font(.title2)
-                    .bold()
-                Text("\(user?.email ?? "email")")
-                Text("Пол: \(user?.gender ?? "Не указан")")
+        VStack {
+            AsyncImage(url: URL(string: (user?.picture.large) ?? "")) { image in
+                image
+                    .imageScale(.large)
+                    .cornerRadius(10)
+                    .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.green, lineWidth: 2)
+                        )
+            } placeholder: {
+                ProgressView()
             }
-        }
-        .onAppear {
-//            NetworkServiceWithCompletions.shared.fetchData { result in
-//                switch result {
-//                case .success(let usersData):
-//                    let user = usersData.results[0]
-//                    self.user = user
-//                case .failure(let failure):
-//                    print(failure.localizedDescription)
+            .padding()
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Hi, my name is")
+                        .foregroundColor(.gray)
+                    Text("\(user?.name.first ?? "Имя") \(user?.name.last ?? "Фамилия")")
+                        .font(.title2)
+                        .bold()
+                    Text("My e-mail:")
+                        .foregroundColor(.gray)
+                    Text("\(user?.email ?? "email")")
+                    Text("My gender:")
+                        .foregroundColor(.gray)
+                    Text("\(user?.gender ?? "Не указан")")
+                    Text("I live in")
+                        .foregroundColor(.gray)
+                    Text(user?.location.country ?? "none")
+                    Text("My phone is")
+                        .foregroundColor(.gray)
+                    Text(user?.phone ?? "none")
+                }
+            }
+            .onAppear {
+//                NetworkServiceWithCompletions.shared.fetchData { result in
+//                    switch result {
+//                    case .success(let usersData):
+//                        let user = usersData.results[0]
+//                        self.user = user
+//                    case .failure(let failure):
+//                        print(failure.localizedDescription)
+//                    }
 //                }
-//            }
-            Task {
-                let result = try await NetworkServiceWithAsync.shared.fetchData()
-                self.user = result.results[0]
+                Task {
+                    let result = try await NetworkServiceWithAsync.shared.fetchData()
+                    self.user = result.results[0]
+                }
             }
-        }
         .padding()
+        }
     }
 }
 
